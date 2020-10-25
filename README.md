@@ -1,8 +1,9 @@
 # wgtrack
 
-> wgtrack tracks WireGuard links, exports the links' status, and updates endpoints as needed.
+"wgtrack" tracks WireGuard links, exports the links' status, and updates endpoints as needed.
 
 WireGuard is a great VPN solution. wgtrack provides the tooling around it to track the status of the links and export the data for monitoring solutions. It also re-resolves endpoint hostnames to thus support connections between dial-in peers with changing IP addresses.
+
 Note: This is code in "works for me" quality; it is not tested properly. This tool started as an exercise in using Python's asyncio library.
 
 ---
@@ -19,11 +20,11 @@ $ pip install wgtrack
 ```
 
 - Configure wgtrack using /etc/wgtrack.conf
-- Configure wgtrack to run as services as needed
+- Configure wgtrack to run as a service as needed
 
 ### Clone (for developers only)
 
-- Clone this repo to your local machine using `https://github.com/towalink/wgtrack.git`
+Clone this repo to your local machine using `https://github.com/towalink/wgtrack.git`
 
 ---
 
@@ -52,7 +53,7 @@ $ python -m wgtrack
 ```shell
 $ python -m wgtrack --config /etc/my_special_wgtrack.conf
 ```
-- Configure the detail of logging information
+- Configure the level of detail of logging information
 
 ```shell
 $ python -m wgtrack --loglevel debug
