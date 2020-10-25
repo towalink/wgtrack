@@ -100,7 +100,7 @@ In the Telegraf config, something like the following needs to be added:
 
 ## License
 
-[![License](http://img.shields.io/:license-gpl3-blue.svg?style=flat-square)](http://opensource.org/licenses/gpl-license.php)
+[![License](http://img.shields.io/:license-agpl3-blue.svg?style=flat-square)](https://opensource.org/licenses/AGPL-3.0)
 
-- **[GPL3 license](http://opensource.org/licenses/gpl-license.php)**
-- Copyright 2020 © <a href="https://www.github.com/towalink/wgtrack" target="_blank">The Towalink Project</a>.
+- **[AGPL3 license](https://opensource.org/licenses/AGPL-3.0)**
+- Copyright 2020 © <a href="https://www.towalink.net" target="_blank">Dirk Henrici</a>.

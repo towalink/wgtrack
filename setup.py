@@ -7,7 +7,7 @@ with open('README.md', 'r') as f:
 
 setup_kwargs = {
     'name': 'wgtrack',
-    'version': '0.1.0',
+    'version': '0.1.1',
     'author': 'The Towalink Project',
     'author_email': 'pypi.wgtrack@towalink.net',
     'description': 'wgtrack tracks WireGuard links, exports the status, and updates endpoints as needed',
@@ -17,14 +17,7 @@ setup_kwargs = {
     'packages': setuptools.find_packages('src'),
     'package_dir': {'': 'src'},
     'include_package_data': True,
-    'install_requires': ['python-configuration',
-                         'jinja2',
-                         'pyyaml',
-                         'toml',
-                         'tomlkit',
-                         'ansible',
-                         'wgconfig'
-                        ],
+    'install_requires': [ ],
     'entry_points': '''
         [console_scripts]
         wgtrack=wgtrack:main
