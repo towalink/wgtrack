@@ -73,7 +73,7 @@ After initialization (1), this tool periodically queries the status (2) of the W
 
 The wgtrack configuration file and also the WireGuard configuration files in "/etc/wireguard" are read. Based on this, the tool knows about all configured WireGuard interfaces and their peers (including configured endpoint hostnames). In case of a change of the configuration, wgtrack may be notified by a SIGHUP signal to redo this initialization step.
 
-The wgtrack configuration file used the ini format. General parameters are specified in the "[general]" section. Parameters that shall be applied to all sections are specified in the "[DEFAULT]" section. Parameters for individual interfaces are specified in sections named "[interface:<ifname>]" with "<ifname>" being the name of the interface. Parameters for individual outputs are specified in sections named "[output:<outputname>]" with "<outputname>" being the name of the output.
+The wgtrack configuration file uses the ini format. General parameters are specified in the "[general]" section. Parameters that shall be applied to all sections are specified in the "[DEFAULT]" section. Parameters for individual interfaces are specified in sections named "[interface:&lt;ifname&gt;]" with "&lt;ifname&gt;" being the name of the interface. Parameters for individual outputs are specified in sections named "[output:&lt;outputname&gt;]" with "&lt;outputname&gt;" being the name of the output.
 
 ### (2) Periodic queries
 
