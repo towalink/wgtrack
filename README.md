@@ -91,6 +91,11 @@ If a link is considered down, its peer endpoint can be re-resolved. Before this 
 
 Outputs for the status information can be configured. Currently, the wire protocol of InfluxDB is supported as output format. This format is used by "Telegraf".
 
+Add the following in your wgtrack.ini to enable output in the Influx wire format:
+```
+[output:influx]
+```
+
 In the Telegraf config, something like the following needs to be added:
 ```
 [[inputs.file]]

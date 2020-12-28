@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import socket
 import time
 
 from . import atomicwrite
@@ -15,8 +14,7 @@ async def output_status_influx(config, data):
     # https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
     # https://docs.influxdata.com/influxdb/v1.7/write_protocols/line_protocol_tutorial/
     filename = config.get('filename', '/var/cache/wg-track_influx.out')
-    with atomicwrite.open_for_atomic_write(filename) as f:
-      hostname = socket.getfqdn()
+    with atomicwrite.open_for_atomic_write(filename, perm=0o644) as f:
       for interface, interfacedata, peer, peerdata in data.peeriterator():
           timestamp = peerdata.get('timestamp')
           if timestamp is None:
@@ -39,8 +37,9 @@ async def output_status_influx(config, data):
                 value = '"' + value + '"'
               reading = '{attr}={value}'.format(attr=attr, value=value)
               readings.append(reading)
+          peer = peer.replace('=', '\=') # the equal sign needs to be escaped
           readings = ','.join(readings)    
-          reading = 'wireguard,hostname={hostname},interface={interface},peer={peer} {readings} {timestamp}\n'.format(hostname=hostname, interface=interface, peer=peer, readings=readings, timestamp=timestamp)
+          reading = 'wgtrack,interface={interface},peer={peer} {readings} {timestamp}\n'.format(interface=interface, peer=peer, readings=readings, timestamp=timestamp)
           f.write(reading)
 
 async def output_status(outputs, data):
