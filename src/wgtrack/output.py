@@ -37,6 +37,10 @@ async def output_status_influx(config, data):
                 value = '"' + value + '"'
               reading = '{attr}={value}'.format(attr=attr, value=value)
               readings.append(reading)
+          if peerdata.get('status') == 'up:ok':
+              readings.append('is_up=1i')
+          else:
+              readings.append('is_up=0i')
           peer = peer.replace('=', '\=') # the equal sign needs to be escaped
           readings = ','.join(readings)    
           reading = 'wgtrack,interface={interface},peer={peer} {readings} {timestamp}\n'.format(interface=interface, peer=peer, readings=readings, timestamp=timestamp)
