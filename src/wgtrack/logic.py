@@ -24,14 +24,14 @@ class Logic():
         '''Reload the config and status'''
         self.data.initialize()
 
-    async def ping(self, destination, ping6=False):
+    async def ping(self, destination, interface, ping6=False):
         '''Asynchronously execute the ping command to chech reachability'''
         command = 'ping'
         if ping6 or (':' in destination):
             command = 'ping6'
-        proc = await asyncio.create_subprocess_exec(command, '-q', '-c', '1', '-w', '1', destination, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+        proc = await asyncio.create_subprocess_exec(command, '-q', '-c', '1', '-w', '1', '-W', '1', '-I', interface, destination, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await proc.communicate()
-        return (proc.returncode != 0)
+        return proc.returncode
 
     def is_hostname(self, peername):
         '''Checks whether the provided peer is defined by hostname (in contrast to IP address)'''
@@ -72,7 +72,7 @@ class Logic():
             next = 'unchanged'
             if peerdata.get('handshake-status', 'failed') != 'failed':
                 if peerdata.get('ping-address') is None:
-                    peerdata['ping-address'] = peerdata['allowed-ips'][0].partition(':')[0]
+                    peerdata['ping-address'] = peerdata['allowed-ips'][0].partition('/')[0]
                 if ping_interval > 0:
                     if cycle_counter % ping_interval == 0:
                         next = 'ping'                
@@ -143,10 +143,10 @@ class Logic():
             ping_tasks = []
             for interface, interfacedata, peer, peerdata in ping_plan:
                 addr = peerdata['ping-address']
-                ping_tasks.append(asyncio.ensure_future(self.ping(addr)))
+                ping_tasks.append(asyncio.ensure_future(self.ping(addr, interface)))
             await asyncio.gather(*ping_tasks)
             for i, ping_task in enumerate(ping_tasks):
-                if ping_task.result():
+                if ping_task.result() == 0:
                     if ping_plan[i][3]['status'] != 'up:ok':
                         ping_plan[i][3]['status'] = 'up:ok'
                         ping_plan[i][3]['cycle-counter'] = 0
@@ -154,7 +154,7 @@ class Logic():
                     ping_plan[i][3]['ping-failcounter'] = 0
                 else:
                     ping_plan[i][3]['ping-failcounter'] = ping_plan[i][3].get('ping-failcounter', 0) + 1
-                    if ping_plan[i][3]['ping-failcounter'] >= 'ping_failafternum':
+                    if ping_plan[i][3]['ping-failcounter'] >= ping_failafternum:
                         logger.info('Changing status of [{interface}:{peer}] to [down:waiting] after failed ping'.format(interface=ping_plan[i][0], peer=ping_plan[i][2]))
                         ping_plan[i][3]['status'] = 'down:waiting'
                         ping_plan[i][3]['cycle-counter'] = 0
