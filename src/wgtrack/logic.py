@@ -148,15 +148,16 @@ class Logic():
             for i, ping_task in enumerate(ping_tasks):
                 if ping_task.result() == 0:
                     if ping_plan[i][3]['status'] != 'up:ok':
+                        logger.info('Changing status of [{interface}:{peer}] to [up:ok] after successful ping'.format(interface=ping_plan[i][0], peer=ping_plan[i][2]))
                         ping_plan[i][3]['status'] = 'up:ok'
                         ping_plan[i][3]['cycle-counter'] = 0
-                        logger.info('Changing status of [{interface}:{peer}] to [up:ok] after successful ping'.format(interface=ping_plan[i][0], peer=ping_plan[i][2]))
                     ping_plan[i][3]['ping-failcounter'] = 0
                 else:
                     ping_plan[i][3]['ping-failcounter'] = ping_plan[i][3].get('ping-failcounter', 0) + 1
                     if ping_plan[i][3]['ping-failcounter'] >= ping_failafternum:
-                        logger.info('Changing status of [{interface}:{peer}] to [down:waiting] after failed ping'.format(interface=ping_plan[i][0], peer=ping_plan[i][2]))
-                        ping_plan[i][3]['status'] = 'down:waiting'
+                        if ping_plan[i][3]['status'] != 'down:waiting':
+                            logger.info('Changing status of [{interface}:{peer}] to [down:waiting] after failed ping'.format(interface=ping_plan[i][0], peer=ping_plan[i][2]))
+                            ping_plan[i][3]['status'] = 'down:waiting'
                         ping_plan[i][3]['cycle-counter'] = 0
         # Output new status
         await output.output_status(self.config.outputs, self.data)
