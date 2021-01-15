@@ -47,7 +47,7 @@ class Logic():
         '''Checks whether the provided endpoint is defined by hostname (in contrast to IP address)'''
         if endpoint is None:
             return False
-        return self.is_hostname(endpoint.partition(':')[0])
+        return self.is_hostname(endpoint.rpartition(':')[0]) # rpartition also works with IPv6
 
     async def do_periodically(self):
         '''Tasks to be executed periodically each cycle (called by scheduler coroutine)'''
@@ -164,8 +164,12 @@ class Logic():
 
     def update_peer(self, interface, peer, config_endpoint, endpoint):
         '''Checks whether peer needs to be updated and does it if needed'''
-        config_endpoint, _, config_port = config_endpoint.partition(':')
-        endpoint = endpoint.partition(':')[0]
+        config_endpoint, _, config_port = config_endpoint.rpartition(':') # rpartition also works with IPv6
+        # Endpoint IPv4 has format "1.1.1.1:51712", endpoint IPv6 has format "[2003:db:cf0c:f100:dea6:32ff:fe9a:859d]:51712"; thus split at last colon
+        endpoint = endpoint.rpartition(':')[0]
+        # Remove leading "[" and trailing "]" in IPv6 case
+        endpoint = endpoint.strip('[')
+        endpoint = endpoint.strip(']')
         logger.info('Resolving [{0}]'.format(config_endpoint))
         needed_endpoint = socket.getaddrinfo(config_endpoint, 0)[0][4][0] # get ip address
         if needed_endpoint != endpoint:
