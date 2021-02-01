@@ -171,8 +171,13 @@ class Logic():
         endpoint = endpoint.strip('[')
         endpoint = endpoint.strip(']')
         logger.info('Resolving [{0}]'.format(config_endpoint))
-        needed_endpoint = socket.getaddrinfo(config_endpoint, 0)[0][4][0] # get ip address
-        if needed_endpoint != endpoint:
+        needed_endpoint = None
+        try:
+            needed_endpoint = socket.getaddrinfo(config_endpoint, 0)[0][4][0] # get ip address
+        except socket.gaierror:
+            # Something like "socket.gaierror: [Errno -3] Try again" can happen here
+            logger.warning('Error resolving interface endpoint [{0}]: {1}'.format(config_endpoint, str(e)))            
+        if (needed_endpoint is not None) and (needed_endpoint != endpoint):
             logger.info('Changing interface endpoint [{0}] to changed IP [{1}]'.format(config_endpoint, needed_endpoint))        
             if config_port is not None:
                 needed_endpoint += ':' + config_port
