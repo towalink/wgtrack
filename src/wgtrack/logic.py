@@ -174,7 +174,7 @@ class Logic():
         needed_endpoint = None
         try:
             needed_endpoint = socket.getaddrinfo(config_endpoint, 0)[0][4][0] # get ip address
-        except socket.gaierror:
+        except socket.gaierror as e:
             # Something like "socket.gaierror: [Errno -3] Try again" can happen here
             logger.warning('Error resolving interface endpoint [{0}]: {1}'.format(config_endpoint, str(e)))            
         if (needed_endpoint is not None) and (needed_endpoint != endpoint):
