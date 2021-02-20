@@ -70,7 +70,7 @@ class Logic():
             update_peer = False
             # Act based on current state
             next = 'unchanged'
-            if peerdata.get('handshake-status', 'failed') != 'failed':
+            if peerdata.get('handshake-status', 'failed') not in ['none', 'failed']:
                 if peerdata.get('ping-address') is None:
                     peerdata['ping-address'] = peerdata['allowed-ips'][0].partition('/')[0]
                 if ping_interval > 0:

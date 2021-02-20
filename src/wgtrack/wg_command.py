@@ -29,7 +29,7 @@ class WireguardCommand():
     def check_handshake(self, latest_handshake, persistent_keepalive):
         '''Checks whether handshake succeeded as expected'''
         if latest_handshake == 0: # no handshake took place successfully yet
-            return None, False
+            return None, 'none'
         if persistent_keepalive == None: # convert this parameter to an integer
             persistent_keepalive = 0
         delta = int(time.time()) - latest_handshake # delta in seconds
