@@ -25,7 +25,7 @@ class Logic():
         self.data.initialize()
 
     async def ping(self, destination, interface, ping6=False):
-        '''Asynchronously execute the ping command to chech reachability'''
+        '''Asynchronously execute the ping command to check reachability'''
         command = 'ping'
         if ping6 or (':' in destination):
             command = 'ping6'
@@ -80,7 +80,7 @@ class Logic():
                     next = 'up:ok'
             elif (status == 'undefined') or (status == 'up:ok'):
                 if self.endpoint_is_hostname(peerdata.get('config_endpoint')):
-                    next = 'down:waiting' if (cycles_wait > 0) else 'down:checking'
+                    next = 'down:waiting' if (cycles_wait > 0) and (status != 'undefined') else 'down:checking'
                 else: # no further check of peer needed
                     if peerdata.get('endpoint') is None:
                         next = 'disabled'
