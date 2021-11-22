@@ -7,7 +7,7 @@ with open('README.md', 'r') as f:
 
 setup_kwargs = {
     'name': 'wgtrack',
-    'version': '0.1.8',
+    'version': '0.1.9',
     'author': 'The Towalink Project',
     'author_email': 'pypi.wgtrack@towalink.net',
     'description': 'wgtrack tracks WireGuard links, exports the status, and updates endpoints as needed',
@@ -26,8 +26,8 @@ setup_kwargs = {
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Operating System :: POSIX :: Linux',
-        'Development Status :: 3 - Alpha',
-        #'Development Status :: 4 - Beta',
+        #'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         #'Development Status :: 5 - Production/Stable',
         'Intended Audience :: System Administrators',
         'Intended Audience :: Information Technology',

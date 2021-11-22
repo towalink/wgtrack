@@ -5,7 +5,7 @@
 
 """
 Towalink
-Copyright (C) 2020 Dirk Henrici
+Copyright (C) 2020-2021 Dirk Henrici
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -36,11 +36,12 @@ import sys
 
 from . import config
 from . import eventprocessor
+from . import setupenv
 
 
 def usage():
     """Show information on command line arguments"""
-    print('Usage: %s [-?|--help] [-l|--loglevel debug|info|error] [-c|--config <config file>]' % sys.argv[0])
+    print('Usage: %s [-?|--help] [-l|--loglevel debug|info|error] [-c|--config <config file>] [install|uninstall]' % sys.argv[0])
     print('Track WireGuard tunnels')
     print()
     print('  -?, --help                        show program usage')
@@ -48,6 +49,8 @@ def usage():
     print('                                    default: info')
     print('  -c, --config <config file>        location of the configuration file')
     print('                                    default: /etc/wgtrack.conf')
+    print('  install                           start and install as service')
+    print('  uninstall                         uninstall service')
     print()
     print('Example: %s --loglevel debug --config /etc/alternative_wgtrack.conf' % sys.argv[0])
     print()
@@ -90,18 +93,24 @@ def parseopts():
                 show_usage_and_exit()
         else:
             assert False, 'unhandled option'
-    if len(args) > 0:
+    if (len(args) > 1) or ((len(args) == 1) and (args[0] not in ['install', 'uninstall'])):
         print('unexpected command line arguments')
         show_usage_and_exit()
-    return configfile, loglevel
+    command = args[0] if args else None
+    return configfile, loglevel, command
 
 def main():
     '''Application entry point'''
-    configfile, loglevel = parseopts()
+    configfile, loglevel, command = parseopts()
     cfg = config.Config(configfile)
     cfg.loglevel = loglevel # set loglevel if not None
     logging.basicConfig(format='%(asctime)s %(levelname)s %(module)s: %(message)s', level=cfg.loglevel)
-    eventprocessor.run(cfg)
+    if command == 'install':
+        setupenv.setup_environment(install=True)
+    elif command == 'uninstall':
+        setupenv.setup_environment(install=False)
+    else:
+        eventprocessor.run(cfg)
 
 
 if __name__ == "__main__":
