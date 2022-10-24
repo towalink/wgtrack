@@ -6,6 +6,7 @@ import logging
 import pprint
 import signal
 import socket
+import sys
 import time
 
 from . import logic
@@ -21,7 +22,8 @@ class EventProcessor():
         '''Constructor'''
         self.config = config
         self.loop = asyncio.get_event_loop()
-        self.queue = asyncio.Queue(loop=self.loop)
+        # no longer working with Python 3.10: self.queue = asyncio.Queue(loop=self.loop)
+        self.queue = asyncio.Queue(**({"loop": loop} if sys.version_info[:2] < (3, 10) else {}))
         self.logic = logic.Logic(config, self.enqueue)
 
     def handle_hup(self, signum, frame):

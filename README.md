@@ -4,7 +4,7 @@
 
 WireGuard is a great VPN solution. wgtrack provides the tooling around it to track the status of the links and export the data for monitoring solutions. It also re-resolves endpoint hostnames to thus support connections between dial-in peers with changing IP addresses.
 
-Note: This is code in "works for me" quality; it is not tested properly. This tool started as an exercise in using Python's asyncio library.
+Note: This is code in "works for me" quality but in use for quite some time now. This tool started as an exercise in using Python's asyncio library.
 
 ---
 
@@ -109,4 +109,4 @@ In the Telegraf config, something like the following needs to be added:
 [![License](http://img.shields.io/:license-agpl3-blue.svg?style=flat-square)](https://opensource.org/licenses/AGPL-3.0)
 
 - **[AGPL3 license](https://opensource.org/licenses/AGPL-3.0)**
-- Copyright 2020 © <a href="https://www.towalink.net" target="_blank">Dirk Henrici</a>.
+- Copyright 2020-2022 © <a href="https://www.towalink.net" target="_blank">Dirk Henrici</a>.
