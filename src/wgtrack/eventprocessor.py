@@ -23,7 +23,7 @@ class EventProcessor():
         self.config = config
         self.loop = asyncio.get_event_loop()
         # no longer working with Python 3.10: self.queue = asyncio.Queue(loop=self.loop)
-        self.queue = asyncio.Queue(**({"loop": loop} if sys.version_info[:2] < (3, 10) else {}))
+        self.queue = asyncio.Queue(**({"loop": self.loop} if sys.version_info[:2] < (3, 10) else {}))
         self.logic = logic.Logic(config, self.enqueue)
 
     def handle_hup(self, signum, frame):
